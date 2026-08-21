@@ -24,14 +24,38 @@ The mod ID remains `c2me-opts-accel-cuda` for compatibility with existing instal
 
 ### NVIDIA runtime
 
-In addition to the NVIDIA driver, the addon needs these NVRTC files:
+The NVIDIA display driver alone is not enough. The addon needs two NVRTC files to compile its CUDA kernels.
+
+#### Easy Windows setup
+
+1. Download the official NVIDIA NVRTC package: [CUDA NVRTC for Windows x86_64](https://developer.download.nvidia.com/compute/cuda/redist/cuda_nvrtc/windows-x86_64/cuda_nvrtc-windows-x86_64-13.0.48-archive.zip).
+2. Open the downloaded ZIP file.
+3. Inside the ZIP, open the `bin` folder and copy these two files:
 
 ```text
-c2me-cuda/nvrtc/nvrtc64_130_0.dll
-c2me-cuda/nvrtc/nvrtc-builtins64_133.dll
+nvrtc64_130_0.dll
+nvrtc-builtins64_133.dll
 ```
 
-Place them in the Minecraft instance directory or use `-Dc2me.cuda.nvrtc.dir=<absolute-path>`.
+4. Open your Prism Launcher instance folder. In Prism, right-click the instance and choose **Folder**.
+5. Inside the instance's `minecraft` folder, create these folders:
+
+```text
+minecraft/c2me-cuda/nvrtc/
+```
+
+6. Put both DLLs inside that `nvrtc` folder. The final paths must be:
+
+```text
+minecraft/c2me-cuda/nvrtc/nvrtc64_130_0.dll
+minecraft/c2me-cuda/nvrtc/nvrtc-builtins64_133.dll
+```
+
+7. Start Minecraft normally. Do not rename the DLLs.
+
+The official NVIDIA package contains the two DLLs together; NVIDIA does not provide them as separate individual download pages. The package is for Windows x86_64 and CUDA 13.0. NVIDIA's [NVRTC documentation](https://docs.nvidia.com/cuda/archive/13.0.0/nvrtc/index.html) describes the Windows DLL layout.
+
+Advanced users can instead set `-Dc2me.cuda.nvrtc.dir=<absolute-path-to-the-folder>` as a JVM argument, pointing directly to the folder containing both DLLs.
 
 ### Building
 
@@ -67,14 +91,38 @@ O ID do mod continua sendo `c2me-opts-accel-cuda` para manter a compatibilidade 
 
 ### Runtime NVIDIA
 
-Além do driver NVIDIA, o addon precisa destes arquivos NVRTC:
+O driver NVIDIA sozinho não é suficiente. O addon precisa de dois arquivos NVRTC para compilar os kernels CUDA.
+
+#### Instalação fácil no Windows
+
+1. Baixe o pacote oficial NVRTC da NVIDIA: [CUDA NVRTC para Windows x86_64](https://developer.download.nvidia.com/compute/cuda/redist/cuda_nvrtc/windows-x86_64/cuda_nvrtc-windows-x86_64-13.0.48-archive.zip).
+2. Abra o arquivo ZIP baixado.
+3. Dentro do ZIP, abra a pasta `bin` e copie estes dois arquivos:
 
 ```text
-c2me-cuda/nvrtc/nvrtc64_130_0.dll
-c2me-cuda/nvrtc/nvrtc-builtins64_133.dll
+nvrtc64_130_0.dll
+nvrtc-builtins64_133.dll
 ```
 
-Coloque-os na pasta da instância do Minecraft ou use `-Dc2me.cuda.nvrtc.dir=<caminho-absoluto>`.
+4. Abra a pasta da instância no Prism Launcher. No Prism, clique com o botão direito na instância e escolha **Pasta**.
+5. Dentro da pasta `minecraft` da instância, crie:
+
+```text
+minecraft/c2me-cuda/nvrtc/
+```
+
+6. Coloque os dois DLLs dentro dessa pasta. Os caminhos finais devem ser:
+
+```text
+minecraft/c2me-cuda/nvrtc/nvrtc64_130_0.dll
+minecraft/c2me-cuda/nvrtc/nvrtc-builtins64_133.dll
+```
+
+7. Inicie o Minecraft normalmente. Não renomeie os DLLs.
+
+O pacote oficial da NVIDIA contém os dois DLLs juntos; a NVIDIA não oferece páginas separadas de download para cada arquivo. O pacote é para Windows x86_64 e CUDA 13.0. A [documentação NVRTC da NVIDIA](https://docs.nvidia.com/cuda/archive/13.0.0/nvrtc/index.html) explica a estrutura dos DLLs no Windows.
+
+Usuários avançados podem usar `-Dc2me.cuda.nvrtc.dir=<caminho-absoluto-da-pasta>` como argumento da JVM, apontando diretamente para a pasta que contém os dois DLLs.
 
 ### Compilação
 

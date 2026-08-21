@@ -25,4 +25,4 @@ c2me-cuda/nvrtc/nvrtc64_130_0.dll
 c2me-cuda/nvrtc/nvrtc-builtins64_133.dll
 ```
 
-Place that folder under the Minecraft instance directory, or set the JVM property `-Dc2me.cuda.nvrtc.dir=<absolute-path-to-the-folder>`. Obtain the files from a compatible NVIDIA CUDA Toolkit/runtime distribution and follow its redistribution terms.
+Download the official [CUDA NVRTC for Windows x86_64 package](https://developer.download.nvidia.com/compute/cuda/redist/cuda_nvrtc/windows-x86_64/cuda_nvrtc-windows-x86_64-13.0.48-archive.zip), open its `bin` folder, and copy `nvrtc64_130_0.dll` and `nvrtc-builtins64_133.dll` into `minecraft/c2me-cuda/nvrtc/` inside your instance. In Prism Launcher, right-click the instance and choose **Folder** to find it. Do not rename the DLLs. Advanced users can set `-Dc2me.cuda.nvrtc.dir=<absolute-path-to-the-folder>` instead.

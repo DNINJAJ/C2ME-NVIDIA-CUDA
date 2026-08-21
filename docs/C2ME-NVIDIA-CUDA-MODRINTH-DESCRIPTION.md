@@ -23,7 +23,19 @@ This addon offloads supported density-function and terrain-generation work to NV
 4. Start the game and check the log for `CUDA Device` initialization.
 5. Back up worlds before testing experimental world-generation software.
 
-The runtime folder must contain `nvrtc64_130_0.dll` and `nvrtc-builtins64_133.dll` under `c2me-cuda/nvrtc`, or the JVM property `-Dc2me.cuda.nvrtc.dir` must point to the folder containing them.
+### NVRTC setup for Windows users
+
+The NVIDIA display driver alone is not enough. Follow these exact steps:
+
+1. Download the official [CUDA NVRTC for Windows x86_64 package](https://developer.download.nvidia.com/compute/cuda/redist/cuda_nvrtc/windows-x86_64/cuda_nvrtc-windows-x86_64-13.0.48-archive.zip).
+2. Open the ZIP and then open its `bin` folder.
+3. Copy `nvrtc64_130_0.dll` and `nvrtc-builtins64_133.dll`.
+4. In Prism Launcher, right-click your instance and choose **Folder**.
+5. Open the instance's `minecraft` folder and create `c2me-cuda\nvrtc`.
+6. Paste both DLLs into that folder. The final paths must be `minecraft/c2me-cuda/nvrtc/nvrtc64_130_0.dll` and `minecraft/c2me-cuda/nvrtc/nvrtc-builtins64_133.dll`.
+7. Start Minecraft normally. Do not rename the DLLs.
+
+The official NVIDIA package contains both files together. Advanced users can instead set `-Dc2me.cuda.nvrtc.dir` to the folder containing both DLLs.
 
 ### Status
 
