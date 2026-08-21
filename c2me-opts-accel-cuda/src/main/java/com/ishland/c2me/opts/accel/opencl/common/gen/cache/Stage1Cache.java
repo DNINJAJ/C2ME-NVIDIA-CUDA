@@ -59,7 +59,7 @@ public class Stage1Cache {
             surface = device.getBufferCache().allocate(CLBufferCache.Type.ESTIMATE_SURFACE_HEIGHT_RX, surfaceBytes, device::allocate);
             rwData = CLDataUtil.worldgen_data_root$createForFlatCacheOnly(new ChunkPos(index.x << CACHE_CHUNK_WIDTH_SHIFT, index.z << CACHE_CHUNK_WIDTH_SHIFT), CACHE_CHUNK_WIDTH, worldContext.getGeneratedCLSource(), null, false);
             rw = device.getBufferCache().allocate(CLBufferCache.Type.GEN_STAGE1_RW_DATA, rwData.remaining(), device::allocate);
-            device.copyToDevice(rw.buffer(), rwData);
+            device.copyToDevice(pair.left().getStream(), rw.buffer(), rwData);
 
             int flatPrefills = worldContext.getGeneratedCLSource().getFlatCachePrefills();
             if (flatPrefills > 0) {
@@ -75,15 +75,16 @@ public class Stage1Cache {
             device.synchronize(pair.left().getStream());
 
             surfaceData = ByteBuffer.allocateDirect(surfaceBytes).order(ByteOrder.nativeOrder());
-            device.copyFromDevice(surface.buffer(), surfaceData);
+            device.copyFromDevice(pair.left().getStream(), surface.buffer(), surfaceData);
             int[] surfaceHeights = new int[CACHE_WIDTH * CACHE_WIDTH];
-            surfaceData.flip().asIntBuffer().get(surfaceHeights);
             double[] flatCaches = new double[flatPrefills * CACHE_WIDTH * CACHE_WIDTH];
             if (flat != null) {
                 flatData = ByteBuffer.allocateDirect(flatCaches.length * Double.BYTES).order(ByteOrder.nativeOrder());
-                device.copyFromDevice(flat.buffer(), flatData);
-                flatData.flip().asDoubleBuffer().get(flatCaches);
+                device.copyFromDevice(pair.left().getStream(), flat.buffer(), flatData);
             }
+            device.synchronize(pair.left().getStream());
+            surfaceData.flip().asIntBuffer().get(surfaceHeights);
+            if (flatData != null) flatData.flip().asDoubleBuffer().get(flatCaches);
             return CompletableFuture.completedFuture(new RawCacheEntry(surfaceHeights, flatCaches));
         } finally {
             if (surface != null) device.getBufferCache().returnBuffer(CLBufferCache.Type.ESTIMATE_SURFACE_HEIGHT_RX, surface);
