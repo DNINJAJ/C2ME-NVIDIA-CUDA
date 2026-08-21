@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "id": "c2me-opts-accel-cuda",
+  "version": "${version}",
+  "name": "C2ME NVIDIA CUDA",
+  "description": "NVIDIA CUDA acceleration for Minecraft world generation",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.ishland.c2me.opts.accel.cuda.ModuleEntryPoint"
+    ]
+  },
+  "mixins": [
+    "c2me-opts-accel-opencl.mixins.json"
+  ],
+  "depends": {
+    "minecraft": "*",
+    "fabricloader": "*",
+    "c2me-base": "*",
+    "c2me-opts-dfc": "=${version}",
+    "c2me-rewrites-chunk-system": "*"
+  },
+  "recommends": {
+    "scalablelux": "*"
+  },
+
+  "authors": [
+    "Jospas",
+    "RelativityMC / ishland (C2ME original creators)"
+  ],
+  "contact": {
+    "sources": "https://github.com/RelativityMC/C2ME-fabric",
+    "issues": "https://github.com/RelativityMC/C2ME-fabric/issues",
+    "discord": "https://discord.gg/Kdy8NM5HW4",
+    "homepage": "https://modrinth.com/mod/c2me-fabric"
+  },
+  "license": "Mixed licensing; see the repository license notices",
+  "custom": {
+    "modmenu": {
+      "parent": "c2me"
+    }
+  }
+}
