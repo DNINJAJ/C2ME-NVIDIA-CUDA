@@ -11,6 +11,12 @@ dependencies {
     compileOnly("org.lwjgl:lwjgl-zstd")
 }
 
+// The CUDA driver integration test is a plain JUnit test and must not boot
+// Fabric's mod-loader test listener, which expects the complete modpack.
+configurations.configureEach {
+    exclude group: "net.fabricmc", module: "fabric-loader-junit"
+}
+
 // This personal fork contains both the original ARR sources and the MIT CUDA
 // bridge files; preserve each upstream header verbatim in the private build.
 tasks.matching { it.name.startsWith("checkLicense") }.configureEach {

@@ -50,6 +50,8 @@ public final class CudaDriver {
     private final MethodHandle cuMemFree;
     private final MethodHandle cuMemcpyHtoD;
     private final MethodHandle cuMemcpyDtoH;
+    private final MethodHandle cuMemcpyHtoDAsync;
+    private final MethodHandle cuMemcpyDtoHAsync;
     private final MethodHandle cuLaunchKernel;
     private final MethodHandle cuCtxSynchronize;
     private final MethodHandle cuStreamCreate;
@@ -62,6 +64,7 @@ public final class CudaDriver {
                        MethodHandle cuModuleLoadData, MethodHandle cuModuleGetFunction,
                        MethodHandle cuMemAlloc, MethodHandle cuMemFree,
                        MethodHandle cuMemcpyHtoD, MethodHandle cuMemcpyDtoH,
+                       MethodHandle cuMemcpyHtoDAsync, MethodHandle cuMemcpyDtoHAsync,
                        MethodHandle cuLaunchKernel, MethodHandle cuCtxSynchronize,
                        MethodHandle cuStreamCreate, MethodHandle cuStreamDestroy,
                        MethodHandle cuStreamSynchronize,
@@ -74,6 +77,8 @@ public final class CudaDriver {
         this.cuMemFree = cuMemFree;
         this.cuMemcpyHtoD = cuMemcpyHtoD;
         this.cuMemcpyDtoH = cuMemcpyDtoH;
+        this.cuMemcpyHtoDAsync = cuMemcpyHtoDAsync;
+        this.cuMemcpyDtoHAsync = cuMemcpyDtoHAsync;
         this.cuLaunchKernel = cuLaunchKernel;
         this.cuCtxSynchronize = cuCtxSynchronize;
         this.cuStreamCreate = cuStreamCreate;
@@ -108,6 +113,10 @@ public final class CudaDriver {
                         NATIVE_INT, NATIVE_LONG, ValueLayout.ADDRESS, NATIVE_LONG)),
                 downcall(lookup, "cuMemcpyDtoH_v2", FunctionDescriptor.of(
                         NATIVE_INT, ValueLayout.ADDRESS, NATIVE_LONG, NATIVE_LONG)),
+                downcall(lookup, "cuMemcpyHtoDAsync_v2", FunctionDescriptor.of(
+                        NATIVE_INT, NATIVE_LONG, ValueLayout.ADDRESS, NATIVE_LONG, NATIVE_LONG)),
+                downcall(lookup, "cuMemcpyDtoHAsync_v2", FunctionDescriptor.of(
+                        NATIVE_INT, ValueLayout.ADDRESS, NATIVE_LONG, NATIVE_LONG, NATIVE_LONG)),
                 downcall(lookup, "cuLaunchKernel", FunctionDescriptor.of(
                         NATIVE_INT, ValueLayout.ADDRESS,
                         NATIVE_INT, NATIVE_INT, NATIVE_INT,
@@ -227,6 +236,32 @@ public final class CudaDriver {
             destination.position(destination.position() + bytes);
         } catch (Throwable t) {
             throw propagate("cuMemcpyDtoH failed", t);
+        }
+    }
+
+    public void copyHostToDevice(long stream, long deviceAddress, ByteBuffer source) {
+        ensureContext();
+        ByteBuffer view = source.duplicate();
+        requireDirect(view);
+        try {
+            checkResult(call(cuMemcpyHtoDAsync, deviceAddress, MemorySegment.ofBuffer(view), view.remaining(), stream),
+                    "cuMemcpyHtoDAsync");
+        } catch (Throwable t) {
+            throw propagate("cuMemcpyHtoDAsync failed", t);
+        }
+    }
+
+    public void copyDeviceToHost(long stream, long deviceAddress, ByteBuffer destination) {
+        ensureContext();
+        ByteBuffer view = destination.duplicate();
+        requireDirect(view);
+        int bytes = view.remaining();
+        try {
+            checkResult(call(cuMemcpyDtoHAsync, MemorySegment.ofBuffer(view), deviceAddress, bytes, stream),
+                    "cuMemcpyDtoHAsync");
+            destination.position(destination.position() + bytes);
+        } catch (Throwable t) {
+            throw propagate("cuMemcpyDtoHAsync failed", t);
         }
     }
 
@@ -447,6 +482,12 @@ public final class CudaDriver {
     private static void checkResult(int result, String operation) {
         if (result != 0) {
             throw new IllegalStateException(operation + " returned CUDA error code " + result);
+        }
+    }
+
+    private static void requireDirect(ByteBuffer buffer) {
+        if (!buffer.isDirect()) {
+            throw new IllegalArgumentException("CUDA asynchronous transfers require a direct ByteBuffer");
         }
     }
 

@@ -114,7 +114,7 @@ public final class CLServerBatchedBiomeNoiseContext {
         long blockOutBuffer = 0L;
         try {
             rwBuffer = device.allocate(rwData.remaining());
-            device.copyToDevice(rwBuffer, rwData);
+            device.copyToDevice(commandQueue.getStream(), rwBuffer, rwData);
             int biomeOutCount = biomeHeight * 4 * BATCH_SIZE * 4 * BATCH_SIZE;
             GeneratedCLSource source = this.worldContext.getGeneratedCLSource();
             if (source.getBiomeMappings() != null) {
@@ -171,13 +171,15 @@ public final class CLServerBatchedBiomeNoiseContext {
             if (biomeOutBuffer != 0L) {
                 ByteBuffer biomeBytes = ByteBuffer.allocateDirect(biomeOutCount * Integer.BYTES)
                         .order(java.nio.ByteOrder.nativeOrder());
-                device.copyFromDevice(biomeOutBuffer, biomeBytes);
+                device.copyFromDevice(commandQueue.getStream(), biomeOutBuffer, biomeBytes);
+                device.synchronize(commandQueue.getStream());
                 writeBiomes(chunks, source, biomeHeight, biomeBytes.flip().asIntBuffer());
             } else {
                 genBiomesFallback(chunks, structureAccessors);
             }
             ByteBuffer blockBytes = ByteBuffer.allocateDirect(horizontalSize * verticalSize * horizontalSize);
-            device.copyFromDevice(blockOutBuffer, blockBytes);
+            device.copyFromDevice(commandQueue.getStream(), blockOutBuffer, blockBytes);
+            device.synchronize(commandQueue.getStream());
             writeBlocks(chunks, this.worldContext.getClBlockStateMappings(), verticalSize, settings,
                     horizontalSize, blockBytes.flip());
         } finally {

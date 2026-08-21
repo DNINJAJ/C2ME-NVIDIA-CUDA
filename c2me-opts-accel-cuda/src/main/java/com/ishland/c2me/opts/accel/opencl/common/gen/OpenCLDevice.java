@@ -112,8 +112,16 @@ public final class OpenCLDevice implements Closeable {
         cuda.copyHostToDevice(address, data);
     }
 
+    public void copyToDevice(long stream, long address, ByteBuffer data) {
+        cuda.copyHostToDevice(stream, address, data);
+    }
+
     public void copyFromDevice(long address, ByteBuffer data) {
         cuda.copyDeviceToHost(address, data);
+    }
+
+    public void copyFromDevice(long stream, long address, ByteBuffer data) {
+        cuda.copyDeviceToHost(stream, address, data);
     }
 
     public void launch(long function, int gridX, int gridY, int gridZ, int blockX, int blockY, int blockZ, long... args) {
