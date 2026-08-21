@@ -22,6 +22,17 @@ This addon is based on **C2ME**, created and maintained by **RelativityMC / ishl
 
 The mod ID remains `c2me-opts-accel-cuda` for compatibility with existing installations. The displayed name is **C2ME NVIDIA CUDA**.
 
+### Required mods
+
+Install these together:
+
+1. [Fabric API](https://modrinth.com/mod/fabric-api)
+2. [C2ME for Fabric](https://modrinth.com/mod/c2me-fabric), using the Minecraft `26.2` release
+3. The separate **C2ME DFC** file from that same release. Its full name is **Concurrent Chunk Management Engine (Optimizations/Density Function Compiler)** and its filename starts with `c2me-fabric-opts-dfc-mc26.2-`.
+4. **C2ME NVIDIA CUDA**, the addon from this project
+
+On the C2ME Modrinth page, open the `26.2` release and download both the main C2ME file and the separate file containing `opts-dfc` in its name. Do not install the OpenCL addon for this CUDA setup.
+
 ### NVIDIA runtime
 
 The NVIDIA display driver alone is not enough. The addon needs two NVRTC files to compile its CUDA kernels.
@@ -88,6 +99,17 @@ Este addon é baseado no **C2ME**, criado e mantido por **RelativityMC / ishland
 - GPU NVIDIA compatível com CUDA
 
 O ID do mod continua sendo `c2me-opts-accel-cuda` para manter a compatibilidade com instalações existentes. O nome exibido é **C2ME NVIDIA CUDA**.
+
+### Mods obrigatórios
+
+Instale estes juntos:
+
+1. [Fabric API](https://modrinth.com/mod/fabric-api)
+2. [C2ME para Fabric](https://modrinth.com/mod/c2me-fabric), usando a versão do Minecraft `26.2`
+3. O arquivo separado **C2ME DFC** da mesma versão. O nome completo é **Concurrent Chunk Management Engine (Optimizations/Density Function Compiler)** e o nome do arquivo começa com `c2me-fabric-opts-dfc-mc26.2-`.
+4. **C2ME NVIDIA CUDA**, o addon deste projeto
+
+Na página do C2ME no Modrinth, abra a versão `26.2` e baixe tanto o arquivo principal do C2ME quanto o arquivo separado que contém `opts-dfc` no nome. Não instale o addon OpenCL nesta configuração CUDA.
 
 ### Runtime NVIDIA
 

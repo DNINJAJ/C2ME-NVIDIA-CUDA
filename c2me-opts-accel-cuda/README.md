@@ -18,6 +18,10 @@ The Fabric mod ID remains `c2me-opts-accel-cuda` for compatibility with existing
 
 ## NVIDIA runtime setup
 
+### Required mods
+
+Install [C2ME for Fabric](https://modrinth.com/mod/c2me-fabric) for Minecraft 26.2, its separate **C2ME DFC** file named `c2me-fabric-opts-dfc-mc26.2-...jar`, Fabric API, and this CUDA addon. The DFC file is named **Concurrent Chunk Management Engine (Optimizations/Density Function Compiler)**. Do not install the OpenCL addon for this setup.
+
 The NVIDIA display driver provides `nvcuda.dll`, but the addon also needs the two NVRTC runtime files used to compile its generated kernels:
 
 ```text

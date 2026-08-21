@@ -15,6 +15,17 @@ This addon offloads supported density-function and terrain-generation work to NV
 - C2ME matching the release version
 - The NVRTC runtime required by the release instructions
 
+### Required mods
+
+Install these together:
+
+1. [Fabric API](https://modrinth.com/mod/fabric-api)
+2. [C2ME for Fabric](https://modrinth.com/mod/c2me-fabric), for Minecraft `26.2`
+3. The separate **C2ME DFC** file from the same C2ME `26.2` release. Its full name is **Concurrent Chunk Management Engine (Optimizations/Density Function Compiler)** and its filename starts with `c2me-fabric-opts-dfc-mc26.2-`.
+4. The C2ME NVIDIA CUDA addon from this project.
+
+Open the C2ME Modrinth page, choose the `26.2` release, and download both the main C2ME file and the separate `opts-dfc` file. Do not install the OpenCL addon for this CUDA setup.
+
 ### Installation
 
 1. Install the matching Fabric version and C2ME.
