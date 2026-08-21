@@ -72,8 +72,6 @@ public class Stage1Cache {
             }
             long kernel = device.getKernel(pair.right().getProgram(com.ishland.c2me.opts.accel.opencl.common.compiler.OpenCLCGen.ProgramType.ESTIMATE_SURFACE_HEIGHT), "chunkNoiseSampler_estimateSurfaceHeight_prefill_indep");
             device.launch(pair.left().getStream(), kernel, (CACHE_WIDTH + 7) / 8, (CACHE_WIDTH + 7) / 8, 1, 8, 8, 1, pair.right().programConstDataBuffer(), rw.buffer(), surface.buffer(), index.x << CACHE_CHUNK_WIDTH_SHIFT, index.z << CACHE_CHUNK_WIDTH_SHIFT, CACHE_WIDTH);
-            device.synchronize(pair.left().getStream());
-
             surfaceData = ByteBuffer.allocateDirect(surfaceBytes).order(ByteOrder.nativeOrder());
             device.copyFromDevice(pair.left().getStream(), surface.buffer(), surfaceData);
             int[] surfaceHeights = new int[CACHE_WIDTH * CACHE_WIDTH];

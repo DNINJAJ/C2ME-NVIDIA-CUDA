@@ -166,8 +166,6 @@ public final class CLServerBatchedBiomeNoiseContext {
                     "df_noise_kernel", ceilDiv(horizontalSize, 16), ceilDiv(horizontalSize, 16),
                     verticalSize, 16, 16, 1, constData, rwBuffer, blockOutBuffer,
                     this.startingPos.x(), this.startingPos.z());
-            device.synchronize(commandQueue.getStream());
-
             if (biomeOutBuffer != 0L) {
                 ByteBuffer biomeBytes = ByteBuffer.allocateDirect(biomeOutCount * Integer.BYTES)
                         .order(java.nio.ByteOrder.nativeOrder());
